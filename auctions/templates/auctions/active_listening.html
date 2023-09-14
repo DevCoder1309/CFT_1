@@ -1,0 +1,63 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h3 style="padding-left: 40px;">Listing: {{active_listening.item}}</h3>
+     {% if ended %}
+        <div><b>This auction has ended</b></div>
+    {% else %}
+        <div style="padding-left: 50px;"><a href="{% url 'add_watchlist' active_listening.id %}" style="font-size: 1.4em; padding-left: 30px;">Add to watchlist</a>
+         <img src="{{active_listening.photo_url}}" width="400" height="400" style="margin-left: 200px;">
+         <br>
+         <div style="padding-left: 30px;">{{active_listening.description}}<br><br>
+            <h5>
+                Bids so far:<br>
+                {% for i in bid_amount %}
+                        ${{i.amount}} by {{i.user}}, &nbsp;
+                {% endfor %}
+        <!-- {% if active_listening.bids.all.count > 0 %}
+            {{ active_listening.bids.first.amount }}
+        {% else %}
+            {{ active_listening.price }}
+        {% endif %} -->
+    </h5>
+        </div>
+    <div style="padding-left: 30px;">Bids: {{ active_listening.bids.all.count }}.</div>
+    {% if not ended %}
+            <div style="padding-left: 30px;">Place your bid</div>
+    {% else %}
+            <b>You won the auction!</b>
+    {% endif %}
+    {% endif %}
+    {% if request.user.is_authenticated %}
+        <form method="POST" action="{% url 'Biding' active_listening.id %}" class="form-inline" style="padding-left: 20px;">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ bid_form.amount }}
+                <input class="btn btn-primary" type="submit" value="Place Bid" />
+            </div>
+        </form>
+    {% endif %}
+    <form method="POST" action="{% url 'comment' active_listening.id %}">
+    <div id="comments-section">
+        <h3 class="py-4" style="padding-left: 30px;">Comments <span class="badge badge-secondary badge-pill mx-1">{{ active_listening.comments.count }}</span></h3>
+        {% if request.user.is_authenticated %}
+                {% csrf_token %}
+                    {{comment_form}}
+                    <input class="btn btn-primary p-2 m-2" type="submit" value="Post a comment"/>
+        </div>
+        {% endif %}
+    </form>
+        <div class="py-2">
+        {% for comment in active_listening.comments.all %}
+            <div class="card p-1 m-2 col-lg-12 col-sm-12">
+                <div class="card-body">
+                    <h5 class="card-title">{{ comment.user }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ comment.time }}</h6>
+                    {{ comment.comment }}
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
