@@ -6,24 +6,24 @@
         <style>
 
         </style>
-        <title>{% block title %}Auctions{% endblock %}</title>
+        <title>{% block title %}E-Auctions Website{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
     </head>
     <body>
-        <h1 style="text-align: center; padding-top: 30px; font-size: 4em; color: black;">Auctions</h1>
+        <h1 style="text-align: center; padding-top: 30px; font-size: 4em; color: black;">E-Auctions Website</h1>
         <div style="padding-left: 30px; padding-top: 20px; text-align: center; font-size: 1.4em;">
             {% if user.is_authenticated %}
                 Signed in as <strong>{{ user.username }}</strong>.
             {% else %}
-                Not signed in.
+                Please Sign In.
             {% endif %}
         </div>
         <ul class="nav">
+            {% if user.is_authenticated %}
             <li class="nav-item" style="padding-left: 230px;  font-size: 1.4em;">
                 <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
             </li>
-            {% if user.is_authenticated %}
                 <li class="nav-item" style="padding-left: 50px; font-size: 1.4em;">
                     <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
                 </li>
@@ -47,7 +47,7 @@
         </ul>
         <hr>
         <div style="text-align: center; font-size: 2em; color: rgb(45, 251, 251);">
-            E-Auction website
+            Auctions
         </div>
         {% block body %}
         {% endblock %}
