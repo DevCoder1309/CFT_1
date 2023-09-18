@@ -9,7 +9,6 @@
     {% endif %}
 
     <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
         <div class="form-group">
             <input autofocus class="form-control" type="text" name="username" placeholder="Username">
         </div>
@@ -18,7 +17,12 @@
         </div>
         <input class="btn btn-primary" type="submit" value="Login">
     </form>
-
-    Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+    <script type="text/javascript">
+        function confirm_alert(node) {
+            return confirm("I am extreamly sorry bruhh!! 😁");
+        }
+    </script>
+    Don't have an account? <a href="{% url 'login' %}" onclick="return confirm_alert(this);">Register here.</a>
+    
 </div>
 {% endblock %}

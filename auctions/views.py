@@ -7,7 +7,7 @@ from .models import User, Active_Listening, Category, Bid, Comment
 from django import forms
 from django.forms import ModelForm
 from django import forms
-
+from django.views.decorators.csrf import csrf_exempt
 class BidForm(ModelForm):
     class Meta:
         model = Bid
@@ -31,6 +31,8 @@ def index(request):
         "title": "Active Listings",
     })
 
+
+@csrf_exempt
 def login_view(request):
     if request.method == "POST":
 
@@ -201,3 +203,5 @@ def comment(request, id):
             comment.save()
         url = reverse('active_listening', kwargs={'id': id})
         return HttpResponseRedirect(url)
+def flag(request):
+    return render(request, "auctions/flag.html")

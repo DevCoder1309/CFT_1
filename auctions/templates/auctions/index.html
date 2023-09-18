@@ -1,6 +1,5 @@
 {% extends "auctions/layout.html" %}
 {% block body %}
-    {% if user.is_authenticated %}
     <h2 style="text-align: center; padding-top: 10px;">{{title}}</h2>
     <hr>
         <br style="margin-left: 50px;">
@@ -13,5 +12,4 @@
         <a href="{% url 'category' i.category %}" class="badge badge-secondary badge-pill" style="margin-left: 250px;">{{ i.category }}</a>
         <hr>
         {% endfor %}
-    {% endif %}
 {% endblock %}

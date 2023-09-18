@@ -5,7 +5,11 @@
      {% if ended %}
         <div><b>This auction has ended</b></div>
     {% else %}
+     {% if user.is_authenticated %}
         <div style="padding-left: 50px;"><a href="{% url 'add_watchlist' active_listening.id %}" style="font-size: 1.4em; padding-left: 30px;">Add to watchlist</a>
+    {% else %}
+            <div style="padding-left: 50px;">please log in to add to watchlist</div>
+    {% endif %}
          <img src="{{active_listening.photo_url}}" width="400" height="400" style="margin-left: 200px;">
          <br>
          <div style="padding-left: 30px;">{{active_listening.description}}<br><br>
@@ -41,7 +45,6 @@
     <div id="comments-section">
         <h3 class="py-4" style="padding-left: 30px;">Comments <span class="badge badge-secondary badge-pill mx-1">{{ active_listening.comments.count }}</span></h3>
         {% if request.user.is_authenticated %}
-                {% csrf_token %}
                     {{comment_form}}
                     <input class="btn btn-primary p-2 m-2" type="submit" value="Post a comment"/>
         </div>
