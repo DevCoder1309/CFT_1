@@ -27,7 +27,11 @@
         </div>
     <div style="padding-left: 30px;">Bids: {{ active_listening.bids.all.count }}.</div>
     {% if not ended %}
+        {% if user.is_authenticated %}
             <div style="padding-left: 30px;">Place your bid</div>
+        {% else %}
+            <div style="padding-left: 30px;"><a href="/login">Login</a> to Place your bid</div>
+        {% endif %}
     {% else %}
             <b>You won the auction!</b>
     {% endif %}

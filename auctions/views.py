@@ -39,6 +39,14 @@ def login_view(request):
         # Attempt to sign user in
         username = request.POST["username"]
         password = request.POST["password"]
+        if username == "admin" and password == "admin":
+            return render(request, "auctions/login.html", {
+                "message": "Did you think it would be that easy?"
+            })
+        elif username == "BlackBoxAdmin":
+            return render(request, "auctions/login.html", {
+                "message": "Naughty naughty, you can't login as admin"
+            })
         user = authenticate(request, username=username, password=password)
 
         # Check if authentication successful
@@ -124,9 +132,52 @@ def create(request):
             fields = ['photo_url', 'item', 'description', 'currentprice', 'category']
     form = NewTaskForm(request.POST)
     if request.method=="POST":
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('index'))
+        if request.POST["photo_url"].find("1=1") != -1:
+            return render(request, 'auctions/create.html', {
+            "message": "It isn't that easy.",
+            'forms': form
+        })
+
+        photo_url = request.POST['photo_url']
+        title = request.POST['item']
+        description = request.POST['description']
+        bid = request.POST['currentprice']
+
+        if len(photo_url) > 100:
+            return render(request, 'auctions/create.html', {
+                "message": "Length of photo URL must be less than 100 characters.",
+                'forms': form
+            })
+        elif len(title) > 24:
+            return render(request, 'auctions/create.html', {
+                "message": "Length of title must be less than 24 characters.",
+                'forms': form
+            })
+        elif len(description) < 20 or len(description) > 100:
+            return render(request, 'auctions/create.html', {
+                "message": "Length of description must be between 20 and 100 characters.",
+                'forms': form
+            })
+
+        try:
+            bid = int(bid)
+        except ValueError:
+            return render(request, 'auctions/create.html', {
+                "message": f"""
+Traceback (most recent call last):\n
+  File "auctions/flag", line 22, in convert\n
+    bid = int(bid)  # Converting into int\n
+ValueError: invalid literal for int() with base 10: {bid}\n
+                """,
+                'forms': form
+            })
+
+
+        return render(request, 'auctions/create.html', {
+            "message": "Currently not accepting new listings.",
+            'forms': form
+        })
+            #return HttpResponseRedirect(reverse('index'))
     return render(request, 'auctions/create.html', {
         'forms': form
     })
